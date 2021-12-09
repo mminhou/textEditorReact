@@ -7,3 +7,40 @@ body,
   padding: 0;
   text-align: center;
 }
+
+.toolbar {
+  border-bottom: 1px solid whitesmoke;
+  padding: 15px;
+}
+
+.menu-list-item {
+  color: whitesmoke !important;
+  width: 150px;
+}
+
+.tab-list-item  {
+  .tab-list-title-button {
+    color: whitesmoke !important;
+    border-radius: 0 !important;
+    width: 80%;
+  }
+
+  .tab-list-close-button {
+    color: whitesmoke !important;
+    border-radius: 0 !important;
+    width: 10%;
+    border-right: 1px solid whitesmoke;
+  }
+}
+
+.MuiOutlinedInput-root {
+  border: 1px solid white !important;
+  color: #B3B6B7 !important;
+
+  &.Mui-focused {
+    //border-color: white !important;
+  }
+}
+.Mui-focused {
+  border-color: yellow !important;
+}
