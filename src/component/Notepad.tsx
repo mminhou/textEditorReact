@@ -1,12 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {
-    AppBar,
-    Button,
-    Grid,
-    Icon,
-    IconButton, Menu, MenuItem,
-    TextField,
-} from "@material-ui/core";
+import {AppBar, Button, Grid, Menu, MenuItem, TextField} from "@material-ui/core";
 import '../index.scss';
 
 interface Tab {
@@ -38,11 +31,11 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * Tab 생성을 위한 로직
      */
     const add = () => {
+        console.log('Add new tab data .....');
         const newTab: Tab = {title: 'tab' + _cnt, content: 'new tab content', editedContent: ' ', isEdited: false};
         setCnt(_cnt + 1);
         setTabList([..._tabList, newTab]);
         setActiveTab(newTab);
-        console.log('new tab button');
     };
 
     /**
@@ -66,9 +59,9 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * 수정된 Tab의 data(content)를 저장하기 위한 로직
      */
     const save = () => {
-        // 선택된 tab이 없는 상태에서 save 클릭시 에러창
+        // 선택된 tab이 없는 상태에서 save 클릭시 에러발생
         if (!_activatedTab) {
-            alert('Error no choose Tab')
+            alert('The selected tab does not exist.')
             return
         }
         const targetTab = _storageTabList.find(e => e.title === _activatedTab.title);
@@ -83,15 +76,16 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
         // 현재 state tabList에서 해당 tab의 indicator 제거하기 위함.
         setStorageTabList(_storageTabList);
         localStorage.setItem('tabList', JSON.stringify(_storageTabList));
-        alert('success');
+        alert('Successful save tab data.');
     };
 
     /**
      * Tab을 다른 이름으로 저장하기 위한 로직
      */
     const saveAs = () => {
+        console.log('save as data');
         if (!_activatedTab) {
-            alert('Error no choose Tab')
+            alert('Error: The selected tab does not exist.')
             return
         }
         const targetTab = _storageTabList.find(e => e.title === _activatedTab.title);
@@ -100,8 +94,6 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
         } else {
             _storageTabList.push(_activatedTab)
         }
-
-        console.log('save as data');
     };
 
 
@@ -109,8 +101,7 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * Tab을 활성화 시키기위한 로직
      */
     const activate = (tab: Tab) => {
-        console.log(tab);
-        console.log('activate');
+        console.log("Activate the tab.")
         setActiveTab(tab);
     };
 
@@ -208,24 +199,9 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
 };
 
 
-// {_activatedTab ?
-//                     <TextField multiline rows={50} variant="filled" style={{width: '80%'}}
-//                                defaultValue={_activatedTab.content}/>
-//
-//                     :
-//                     <TextField multiline rows={50} variant="filled" style={{width: '80%'}}/>
-//                 }
-
 Notepad.defaultProps = {
     tabList: [],
     storageTabList: JSON.parse(localStorage.getItem('tabList')),
-    // tabList:
-    //     [
-    //     {title: 'tab1', content: 'asdfsadfsdafsdaf', editedContent: '', isEdited: false},
-    //     {title: 'tab2', content: '12312321313', editedContent: '', isEdited: false},
-    //     {title: 'tab3', content: '!@#!@#!@#@!#!#%$#%', editedContent: '', isEdited: false},
-    // ]
-    // ,
     activatedTab: null,
 };
 
