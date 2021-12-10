@@ -16,13 +16,15 @@ body,
 .menu-list-item {
   color: whitesmoke !important;
   width: 150px;
+  font-size: 17px !important;
 }
 
 .tab-list-item  {
+
   .tab-list-title-button {
-    color: whitesmoke !important;
     border-radius: 0 !important;
     width: 80%;
+    font-size: 17px;
   }
 
   .tab-list-close-button {
@@ -33,14 +35,21 @@ body,
   }
 }
 
+.tab-content {
+  width: 70% !important;
+  margin: auto !important;
+}
+
 .MuiOutlinedInput-root {
   border: 1px solid white !important;
   color: #B3B6B7 !important;
 
   &.Mui-focused {
+    border: none !important;
     //border-color: white !important;
   }
 }
-.Mui-focused {
-  border-color: yellow !important;
-}
+
+//.Mui-focused {
+//  border-color: yellow !important;
+//}
