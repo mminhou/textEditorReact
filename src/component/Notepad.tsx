@@ -13,8 +13,6 @@ interface NotepadProps {
     tabList: Tab[];
     storageTabList: Tab[];
     activatedTab?: Tab;
-    // 임시 cnt number
-    cnt: number;
 }
 
 function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
@@ -23,17 +21,23 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
     const [_activatedTab, setActiveTab] = useState<Tab>(activatedTab);
 
     const [_editedContent, setEditedContent] = useState<string>('');
-    const [_cnt, setCnt] = useState<number>(4);
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
+    const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement>(null);
+    const inputRef = useRef<string>();
 
     /**
      * Tab 생성을 위한 로직
      */
     const add = () => {
         console.log('Add new tab data .....');
-        const newTab: Tab = {title: 'tab' + _cnt, content: 'new tab content', editedContent: ' ', isEdited: false};
-        setCnt(_cnt + 1);
+        // 새로운 탭에 랜덤넘버 부여 -> 이미 가지고있는 탭과 동일하다면 err 발생!
+        const cnt: number = Math.floor(Math.random() * 100);
+        const chk: Tab = _tabList.find(e => e.title === 'tab'+cnt);
+        if (chk) {
+            alert('Please retry!');
+            return
+        }
+
+        const newTab: Tab = {title: 'tab'+cnt, content: 'your code here.....', editedContent: '', isEdited: false};
         setTabList([..._tabList, newTab]);
         setActiveTab(newTab);
     };
@@ -64,7 +68,7 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
             alert('The selected tab does not exist.')
             return
         }
-        const targetTab = _storageTabList.find(e => e.title === _activatedTab.title);
+        const targetTab: Tab = _storageTabList.find(e => e.title === _activatedTab.title);
         // targetTab이 있으면 content만 변경, 없으면 storage에 새로운 tab data 추가
         if (targetTab) {
             targetTab.content = _editedContent;
@@ -83,7 +87,7 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * Tab을 다른 이름으로 저장하기 위한 로직
      */
     const saveAs = () => {
-        console.log('save as data');
+        console.log('Save the data as another title.');
         if (!_activatedTab) {
             alert('Error: The selected tab does not exist.')
             return
