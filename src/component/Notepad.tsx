@@ -18,46 +18,48 @@ interface Tab {
 
 interface NotepadProps {
     tabList: Tab[];
+    storageTabList: Tab[];
     activatedTab?: Tab;
     // 임시 cnt number
     cnt: number;
 }
 
-function Notepad({tabList, activatedTab}: NotepadProps) {
+function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
     const [_tabList, setTabList] = useState<Tab[]>(tabList);
+    const [_storageTabList, setStorageTabList] = useState<Tab[]>(storageTabList);
     const [_activatedTab, setActiveTab] = useState<Tab>(activatedTab);
+
     const [_editedContent, setEditedContent] = useState<string>('');
     const [_cnt, setCnt] = useState<number>(4);
-    const inputRef = useRef<HTMLInputElement>(null);
-
     const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
 
     /**
      * Tab 생성을 위한 로직
      */
     const add = () => {
-        const t: Tab = {title: 'tab' + _cnt, content: 'new tab content', editedContent: ' ', isEdited: false};
+        const newTab: Tab = {title: 'tab' + _cnt, content: 'new tab content', editedContent: ' ', isEdited: false};
         setCnt(_cnt + 1);
-        setTabList([..._tabList, t]);
-        setActiveTab(t);
+        setTabList([..._tabList, newTab]);
+        setActiveTab(newTab);
         console.log('new tab button');
     };
 
     /**
      * Tab을 불러오기 위한 로직
      */
-    const load = () => {
-        console.log(localStorage.getItem('tabList'));
-        console.log('load tab button');
+    const load = (tab: Tab) => {
+        console.log('Load the tab data .....');
+        const targetTab: Tab = _tabList.find(e => e.title === tab.title);
+        if (targetTab) {
+            setActiveTab(targetTab);
+            handleMenuClose();
+            return
+        }
+        setTabList([..._tabList, tab]);
+        setActiveTab(tab);
+        handleMenuClose();
+
     };
 
     /**
@@ -69,18 +71,18 @@ function Notepad({tabList, activatedTab}: NotepadProps) {
             alert('Error no choose Tab')
             return
         }
-        const storageTabList = JSON.parse(localStorage.getItem('tabList'));
-        const targetTab = storageTabList.find(e => e.title === _activatedTab.title);
+        const targetTab = _storageTabList.find(e => e.title === _activatedTab.title);
         // targetTab이 있으면 content만 변경, 없으면 storage에 새로운 tab data 추가
         if (targetTab) {
-            if (_editedContent) {
-                targetTab.content = _editedContent;
-            }
+            targetTab.content = _editedContent;
         } else {
-            storageTabList.push(_activatedTab);
+            _storageTabList.push(_activatedTab);
         }
+        // 이 부분을 수정해야 될 거같은디...
+        _activatedTab.isEdited = false;
         // 현재 state tabList에서 해당 tab의 indicator 제거하기 위함.
-        localStorage.setItem('tabList', JSON.stringify(storageTabList));
+        setStorageTabList(_storageTabList);
+        localStorage.setItem('tabList', JSON.stringify(_storageTabList));
         alert('success');
     };
 
@@ -88,13 +90,26 @@ function Notepad({tabList, activatedTab}: NotepadProps) {
      * Tab을 다른 이름으로 저장하기 위한 로직
      */
     const saveAs = () => {
+        if (!_activatedTab) {
+            alert('Error no choose Tab')
+            return
+        }
+        const targetTab = _storageTabList.find(e => e.title === _activatedTab.title);
+        if (targetTab) {
+            targetTab.title = ''
+        } else {
+            _storageTabList.push(_activatedTab)
+        }
+
         console.log('save as data');
     };
+
 
     /**
      * Tab을 활성화 시키기위한 로직
      */
     const activate = (tab: Tab) => {
+        console.log(tab);
         console.log('activate');
         setActiveTab(tab);
     };
@@ -105,7 +120,7 @@ function Notepad({tabList, activatedTab}: NotepadProps) {
     const close = (tab: Tab) => {
         console.log('Press close tab button!');
         const targetTab: Tab = _tabList.find(e => e.title === tab.title);
-        if (_tabList.includes(targetTab)) {
+        if (targetTab) {
             setTabList(_tabList.filter(t => t.title !== tab.title));
         }
         setActiveTab(undefined);
@@ -126,6 +141,17 @@ function Notepad({tabList, activatedTab}: NotepadProps) {
         }
     }
 
+    /**
+     * load dropdown menu login -> using material ui menu
+     */
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+
     return (
         <Grid container justifyContent="center" alignItems="center" spacing={1}>
             <Grid item xs={12}>
@@ -135,24 +161,15 @@ function Notepad({tabList, activatedTab}: NotepadProps) {
                 <AppBar position="static" style={{backgroundColor: "rgb(43, 43, 43)"}}>
                     <div className="toolbar">
                         <Button className="menu-list-item" onClick={add}>new tab</Button>
-
-                        <Button className="menu-list-item"
-                                onClick={handleClick}>load</Button>
-                        <Menu
-                            id="simple-menu"
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        <Button className="menu-list-item" onClick={handleMenuClick}>load</Button>
+                        <Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                            {_storageTabList.map((tab, i: number) => (
+                                <MenuItem key={i} style={{width: 150}} onClick={() => load(tab)}>* {tab.title}</MenuItem>
+                            ))}
                         </Menu>
-
                         <Button className="menu-list-item" onClick={save}>save</Button>
                         <Button className="menu-list-item" onClick={saveAs}>save as</Button>
-                        <TextField size="small" id="outlined-size-normal" defaultValue="another title"
+                        <TextField size="small" id="outlined-size-normal" placeholder="another title"
                                    variant="outlined">
                         </TextField>
                     </div>
@@ -177,13 +194,12 @@ function Notepad({tabList, activatedTab}: NotepadProps) {
             </Grid>
             <Grid item xs={12}>
                 {_tabList.map((tab, i: number) => (
-                    <TextField key={i} className="tab-content"
-                               multiline rows={50} variant="filled" fullWidth
-                               style={{display: _activatedTab && (tab.title === _activatedTab.title) ? 'block' : 'none'}}
-                               defaultValue={tab.content}
-                               onChange={onChange}
-                               ref={inputRef}
-                    />
+                    _activatedTab && tab.title === _activatedTab.title ?
+                        <TextField key={i} className="tab-content"
+                                   multiline rows={50} variant="filled"
+                                   defaultValue={tab.content}
+                                   onChange={onChange}
+                        /> : ''
                 ))}
             </Grid>
 
@@ -201,7 +217,8 @@ function Notepad({tabList, activatedTab}: NotepadProps) {
 //                 }
 
 Notepad.defaultProps = {
-    tabList: JSON.parse(localStorage.getItem('tabList')) || [],
+    tabList: [],
+    storageTabList: JSON.parse(localStorage.getItem('tabList')),
     // tabList:
     //     [
     //     {title: 'tab1', content: 'asdfsadfsdafsdaf', editedContent: '', isEdited: false},
