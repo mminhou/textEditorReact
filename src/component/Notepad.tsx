@@ -28,7 +28,6 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * Tab 생성을 위한 로직
      */
     const add = () => {
-        console.log('Add new tab data .....');
         // 새로운 탭에 랜덤넘버 부여 -> 이미 가지고있는 탭과 동일하다면 err 발생!
         const cnt: number = Math.floor(Math.random() * 100);
         const chk: Tab = _tabList.find(e => e.title === 'tab' + cnt);
@@ -46,7 +45,6 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * Tab을 불러오기 위한 로직
      */
     const load = (tab: Tab) => {
-        console.log('Load the tab data .....');
         const targetTab: Tab = _tabList.find(e => e.title === tab.title);
         if (targetTab) {
             setActiveTab(targetTab);
@@ -68,21 +66,10 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
             alert('The selected tab does not exist.')
             return
         }
-        const targetTab: Tab = _storageTabList.find(e => e.title === _activatedTab.title);
-        const targetTab2: Tab = _tabList.find(e => e.title === _activatedTab.title);
-        // targetTab이 있으면 content만 변경, 없으면 storage에 새로운 tab data 추가
-        if (targetTab) {
-            if (_editedContent) {
-                targetTab.content = _editedContent;
-            }
-        } else {
-            _storageTabList.push(_activatedTab);
-        }
-        // 이 부분을 수정해야 될 거같은디...
-        targetTab2.isEdited = false;
-        // 현재 state tabList에서 해당 tab의 indicator 제거하기 위함.
-        setStorageTabList(_storageTabList);
-        localStorage.setItem('tabList', JSON.stringify(_storageTabList));
+        const targetTab: Tab = _tabList.find(e => e.title === _activatedTab.title);
+        targetTab.content = _editedContent;
+        targetTab.isEdited = false;
+        saveStorage(targetTab);
         alert('Successful save tab data.');
     };
 
@@ -90,42 +77,45 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * Tab을 다른 이름으로 저장하기 위한 로직
      */
     const saveAs = () => {
-        console.log('Save the data as another title.');
         if (!_activatedTab) {
             alert('Error: The selected tab does not exist.')
             return
         }
-        const storageTargetTab = _storageTabList.find(e => e.title === _activatedTab.title);
-        const targetTab =  _tabList.find(e => e.title === _activatedTab.title);
 
-        if (_storageTabList.find(e => e.title === _editedTitle) || _tabList.find(e => e.title === _editedTitle)) {
-            alert('Error: The title is already in use.')
+        // 이미 가지고있는 title 인 경우
+        if (_storageTabList.find(e => e.title === _editedTitle)) {
+            alert('Error: The title is already in use,');
             return
         }
 
-        if (storageTargetTab) {
-            if (_editedTitle) storageTargetTab.title = _editedTitle;
-            if (_editedContent) storageTargetTab.content = _editedContent;
-        } else {
-            if (_editedTitle) targetTab.title = _editedTitle
-            if (_editedContent) targetTab.content = _editedContent
-            _storageTabList.push(_activatedTab)
-        }
-
+        const targetTab = _tabList.find(e => e.title === _activatedTab.title);
+        targetTab.title = _editedTitle;
+        targetTab.content = _editedContent;
         targetTab.isEdited = false;
-        storageTargetTab.isEdited = false;
-
-        setStorageTabList(_storageTabList)
-        localStorage.setItem('tabList', JSON.stringify(_storageTabList));
-        alert('Successful save as another title.')
+        saveStorage(targetTab);
+        alert('Successful save tab data.');
     };
 
+
+    /**
+     * Storage에 tab을 저장하기 위한 로직
+     */
+    const saveStorage = (tab: Tab) => {
+        const targetTab = _storageTabList.find(e => e.title === tab.title);
+        if (targetTab) {
+            targetTab.title = tab.title;
+            targetTab.content = tab.content;
+            targetTab.isEdited = false;
+        } else {
+            _storageTabList.push(tab);
+        }
+        localStorage.setItem('tabList', JSON.stringify(_storageTabList));
+    }
 
     /**
      * Tab을 활성화 시키기위한 로직
      */
     const activate = (tab: Tab) => {
-        console.log("Activate the tab.")
         setActiveTab(tab);
     };
 
@@ -133,7 +123,6 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * 열려있는 Tab을 닫기위한 로직 -> localstorage에서 삭제되는 것은 아님.
      */
     const close = (tab: Tab) => {
-        console.log('Press close tab button!');
         const targetTab: Tab = _tabList.find(e => e.title === tab.title);
         if (targetTab) {
             setTabList(_tabList.filter(t => t.title !== tab.title));
@@ -146,11 +135,10 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * -> onChange 메서드를 통해 event 타겟의 value가 발생하면 수정되었다고 판단 -> 수정된 tab의 title 색상을 바꿔준다.
      */
     const onChangeContent = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value);
         // 최적화하기 위한 로직 -> 이미 edited 된 상태의 tab은 return 처리
         _activatedTab.content = e.target.value;
         setEditedContent(e.target.value);
-        if (_activatedTab.isEdited) return
+        // if (_activatedTab.isEdited) return
         // event 타겟의 value 가 발생시 수정했다고 판단 -> 활성화 된 tab의 edit flag를 바꿔준다.
         const targetTab: Tab = _tabList.find(e => e.title === _activatedTab.title);
         targetTab.isEdited = true;
@@ -207,7 +195,8 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
                     </div>
                     <div style={{display: "inline-block", padding: 10}}>
                         {_tabList.map((tab, i: number) => (
-                            <div key={i} className="tab-list-item" style={{width: 100 / _tabList.length + '%', float: "left"}}>
+                            <div key={i} className="tab-list-item"
+                                 style={{width: 100 / _tabList.length + '%', float: "left"}}>
                                 <Button className="tab-list-title-button" onClick={() => activate(tab)}
                                         style={{
                                             backgroundColor: _activatedTab && _activatedTab.title === tab.title ? 'rgb(116, 122, 128)' : 'rgb(43, 43, 43)',
