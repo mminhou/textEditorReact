@@ -67,7 +67,7 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
             return
         }
         const targetTab: Tab = _tabList.find(e => e.title === _activatedTab.title);
-        targetTab.content = _editedContent;
+        targetTab.content = _editedContent ? _editedContent : _activatedTab.content;
         targetTab.isEdited = false;
         saveStorage(targetTab);
         alert('Successful save tab data.');
@@ -90,7 +90,7 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
 
         const targetTab = _tabList.find(e => e.title === _activatedTab.title);
         targetTab.title = _editedTitle;
-        targetTab.content = _editedContent;
+        targetTab.content = _editedContent ? _editedContent : _activatedTab.content;
         targetTab.isEdited = false;
         saveStorage(targetTab);
         alert('Successful save tab data.');
