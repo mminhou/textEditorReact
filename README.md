@@ -17,7 +17,7 @@
 
 2. 코드가 더럽다...
 
-<br/><br/>
+<br/>
 
 ## Firebase 고도화 작업
 
@@ -31,3 +31,5 @@
 
 - 구글 로그인 버튼 클릭시 팝업창을 통해 구글로그인 할 수 있도록 함.
 - 새로고침시 현재 로그인 정보 사라지도록 설정
+- Localstorage -> Firebase storage 고도화 작업 진행중
+- initial storageState를 firebase storage에서 가져올 때 promise인 상태로 가져오기 때문에 발생할 수 있는 이슈 해결중 
