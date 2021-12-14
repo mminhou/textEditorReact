@@ -14,7 +14,7 @@ function GoogleSignIn() {
     });
 
     return (
-        <Grid container style={{height: '100%'}} justifyContent="center" alignItems="center">
+        <Grid container style={{height: '100%', backgroundColor: "rgb(38, 38, 38)"}} justifyContent="center" alignItems="center">
             <Grid item xs={12}>
                 <button type="button" className="login-with-google-btn" onClick={signInWithGoogle}>
                     Sign in with Google
