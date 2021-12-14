@@ -53,9 +53,12 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
 
     console.log(_storageTabList);
 
-    useEffect(async () => {
-        const res = await getFirebaseStorageData();
-        setStorageTabList(res);
+    useEffect(() => {
+        async function updateStorage() {
+            const res = await getFirebaseStorageData();
+            setStorageTabList(res);
+        }
+        updateStorage();
     }, [])
 
 
