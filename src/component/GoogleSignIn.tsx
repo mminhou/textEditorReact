@@ -1,5 +1,6 @@
 import React from "react";
-import {auth, signInWithGoogle} from "../firebase";
+import {auth, fireStorage} from "../firebase";
+import {signInWithGoogle} from "../firebaseAuth";
 import {Grid} from "@material-ui/core";
 
 function GoogleSignIn() {
@@ -8,7 +9,7 @@ function GoogleSignIn() {
         // ex) user.currentUser.email, user.currentUser.displayName ... etc
 
         if (user !== null) {
-            console.log(user)
+            // console.log(user)
             console.log("로그인 되었습니다.")
         }
     });
