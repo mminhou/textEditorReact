@@ -9,3 +9,8 @@ dist/
 
 # misc
 package-lock.json
+
+# firebase
+.env
+
+
