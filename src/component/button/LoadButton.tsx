@@ -31,7 +31,6 @@ function LoadButton({_tabList, _storageTabList, setActivatedTab, setTabList}) {
         setAnchorEl(null);
     };
 
-
     return (
         <div style={{display: "inline-block"}}>
             <Button className="menu-list-item" onClick={handleMenuClick}>load</Button>
