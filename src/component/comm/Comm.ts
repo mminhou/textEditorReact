@@ -10,3 +10,7 @@ export interface Tab {
     editedContent: string;
     isEdited: boolean;
 }
+
+export const findTargetTab = (list: Tab[], targetId: string) => {
+    return list.find(e => e.title === targetId);
+}

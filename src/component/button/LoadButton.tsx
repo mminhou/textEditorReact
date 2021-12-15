@@ -1,5 +1,5 @@
 import React from "react";
-import {Tab} from "../comm/Comm";
+import {findTargetTab, Tab} from "../comm/Comm";
 import {Button, Menu, MenuItem} from "@material-ui/core";
 
 /**
@@ -10,9 +10,9 @@ function LoadButton({_tabList, _storageTabList, setActivatedTab, setTabList}) {
     const [anchorEl, setAnchorEl] = React.useState<HTMLAnchorElement>(null);
 
     const load = (tab: Tab) => {
-        const targetTab: Tab = _tabList.find(e => e.title === tab.title);
-        if (targetTab) {
-            setActivatedTab(targetTab);
+        const res = findTargetTab(_tabList, tab.title);
+        if (res) {
+            setActivatedTab(res);
             handleMenuClose();
             return
         }

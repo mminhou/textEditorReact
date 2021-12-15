@@ -1,6 +1,6 @@
 import React from "react";
 import {TextField} from "@material-ui/core";
-import {Tab} from "./comm/Comm";
+import {findTargetTab, Tab} from "./comm/Comm";
 
 /**
  * Tab의 content가 수정되었는지 확인하기 위한 함수
@@ -14,7 +14,7 @@ function Content({_tabList, _activatedTab, setEditedContent}) {
         setEditedContent(e.target.value);
         // if (_activatedTab.isEdited) return
         // event 타겟의 value 가 발생시 수정했다고 판단 -> 활성화 된 tab의 edit flag를 바꿔준다.
-        const targetTab: Tab = _tabList.find(e => e.title === _activatedTab.title);
+        const targetTab: Tab = findTargetTab(_tabList, _activatedTab.title);
         targetTab.isEdited = true;
     }
 

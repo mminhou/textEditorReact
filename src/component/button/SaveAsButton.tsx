@@ -1,5 +1,5 @@
 import React from "react";
-import {Tab} from "../comm/Comm";
+import {findTargetTab, Tab} from "../comm/Comm";
 import {Button} from "@material-ui/core";
 
 /**
@@ -14,12 +14,12 @@ function SaveAsButton({_tabList, _storageTabList, _activatedTab, _editedTitle, _
         }
 
         // 이미 가지고있는 title 인 경우
-        if (_storageTabList.find(e => e.title === _editedTitle)) {
+        if (findTargetTab(_storageTabList, _editedTitle)) {
             alert('Error: The title is already in use,');
             return
         }
 
-        const targetTab: Tab = _tabList.find(e => e.title === _activatedTab.title);
+        const targetTab: Tab = findTargetTab(_tabList, _activatedTab.title);
         targetTab.title = _editedTitle;
         targetTab.content = _editedContent ? _editedContent : _activatedTab.content;
         targetTab.isEdited = false;

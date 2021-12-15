@@ -1,6 +1,6 @@
 import React from "react";
 import {Button} from "@material-ui/core";
-import {Tab} from "../comm/Comm";
+import {findTargetTab, Tab} from "../comm/Comm";
 
 /**
  * 수정된 Tab의 data(content)를 저장하기 위한 로직
@@ -13,7 +13,7 @@ function SaveButton({_tabList, _activatedTab, _editedContent, saveStorage}) {
             alert('The selected tab does not exist.')
             return
         }
-        const targetTab: Tab = _tabList.find(e => e.title === _activatedTab.title);
+        const targetTab: Tab = findTargetTab(_tabList, _activatedTab.title);
         targetTab.content = _editedContent ? _editedContent : _activatedTab.content;
         targetTab.isEdited = false;
         saveStorage(targetTab);
