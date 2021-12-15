@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {AppBar, Grid} from "@material-ui/core";
 import '../index.scss';
-import {NotepadProps, Tab} from "./comm/Comm";
+import {findTargetTab, NotepadProps, Tab} from "./comm/Comm";
 import Title from "./Title";
 import Content from "./Content";
 import TabList from "./TabList";
@@ -9,31 +9,7 @@ import SaveAsButton from "./button/SaveAsButton";
 import AddButton from "./button/AddButton";
 import SaveButton from "./button/SaveButton";
 import LoadButton from "./button/LoadButton";
-import {fireStorage} from "../firebase";
-import axios from "axios";
-
-/**
- * Firebase storage GET method (read data.json)
- */
-async function getFirebaseStorageData() {
-    const storageRef = fireStorage.ref().child('data.json');
-    const url = await storageRef.getDownloadURL();
-    const res = await axios.get(url);
-    return res.data
-}
-
-/**
- * Firebase storage POST method
- */
-function setFirebaseStorageData(newData: Tab[]) {
-    const storageRef = fireStorage.ref().child('data.json');
-    const jsonString = JSON.stringify(newData);
-    const blob = new Blob([jsonString], {type: "application/json"});
-    storageRef.put(blob).then(() => {
-        console.log("success upload data to firebase storage");
-    });
-}
-
+import {getFirebaseStorageData, setFirebaseStorageData} from "../firebaseStorage";
 
 function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
     const [_tabList, setTabList] = useState<Tab[]>(tabList);
@@ -56,14 +32,12 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
      * Storage에 tab을 저장하기 위한 로직 -> firebase storage로 고도화
      */
     const saveStorage = (tab: Tab) => {
-        const targetTab: Tab = _storageTabList.find(e => e.title === tab.title);
-        if (targetTab) {
-            targetTab.title = tab.title;
-            targetTab.content = tab.content;
-            targetTab.isEdited = false;
+        const res = findTargetTab(_storageTabList, tab.title);
+        if (res) {
+            res.title = tab.title;
+            res.content = tab.content;
+            res.isEdited = false;
         } else {
-            console.log(_storageTabList);
-            console.log(tab, '-----------------');
             // setStorageTabList([..._storageTabList, tab]);
             _storageTabList.push(tab);
         }
