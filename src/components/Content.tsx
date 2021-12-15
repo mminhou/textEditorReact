@@ -1,6 +1,6 @@
 import React from "react";
 import {TextField} from "@material-ui/core";
-import {findTargetTab, Tab} from "./comm/Comm";
+import {findTargetTab, Tab} from "../comm/Comm";
 
 /**
  * Tab의 content가 수정되었는지 확인하기 위한 함수

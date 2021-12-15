@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {AppBar, Grid} from "@material-ui/core";
 import '../index.scss';
-import {findTargetTab, NotepadProps, Tab} from "./comm/Comm";
-import {getFirebaseStorageData, setFirebaseStorageData} from "../service/firebaseStorage";
+import {findTargetTab, NotepadProps, Tab} from "../comm/Comm";
+import {getFirebaseStorageData, setFirebaseStorageData} from "../services/firebaseStorage";
 import Content from "./Content";
 import TabList from "./TabList";
 import Toolbar from "./Toolbar";
@@ -47,13 +47,19 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
             </Grid>
             <Grid item xs={12}>
                 <AppBar position="static" style={{backgroundColor: "rgb(43, 43, 43)"}}>
-                    <Toolbar _tabList={_tabList} _storageTabList={_storageTabList} _activatedTab={_activatedTab} _editedContent={_editedContent} _editedTitle={_editedTitle}
-                             setTabList={setTabList} setEditedTitle={setEditedTitle} setActivatedTab={setActivatedTab} saveStorage={saveStorage} />
-                    <TabList _tabList={_tabList} _activatedTab={_activatedTab} setTabList={setTabList}
-                             setActivatedTab={setActivatedTab}/>
+                    <Toolbar _tabList={_tabList} setTabList={setTabList}
+                             _storageTabList={_storageTabList}
+                             _activatedTab={_activatedTab} setActivatedTab={setActivatedTab}
+                             _editedContent={_editedContent}
+                             _editedTitle={_editedTitle} setEditedTitle={setEditedTitle}
+                             saveStorage={saveStorage} />
+                    <TabList _tabList={_tabList} setTabList={setTabList}
+                             _activatedTab={_activatedTab} setActivatedTab={setActivatedTab}/>
                 </AppBar>
             </Grid>
-            <Content _tabList={_tabList} _activatedTab={_activatedTab} setEditedContent={setEditedContent}/>
+            <Content _tabList={_tabList}
+                     _activatedTab={_activatedTab}
+                     setEditedContent={setEditedContent}/>
         </Grid>
     )
 };

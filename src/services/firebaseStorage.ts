@@ -1,6 +1,6 @@
 import {fireStorage} from "./firebase";
 import axios from "axios";
-import {Tab} from "./component/comm/Comm";
+import {Tab} from "../comm/Comm";
 
 /**
  * Firebase storage GET method (read data.json)

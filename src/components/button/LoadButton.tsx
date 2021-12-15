@@ -1,5 +1,5 @@
 import React from "react";
-import {findTargetTab, Tab} from "../comm/Comm";
+import {findTargetTab, Tab} from "../../comm/Comm";
 import {Button, Menu, MenuItem} from "@material-ui/core";
 
 /**

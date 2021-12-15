@@ -1,6 +1,6 @@
 import React from "react";
 import {Button} from "@material-ui/core";
-import {findTargetTab, Tab} from "../comm/Comm";
+import {findTargetTab, Tab} from "../../comm/Comm";
 
 /**
  * 수정된 Tab의 data(content)를 저장하기 위한 로직

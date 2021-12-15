@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import Notepad from './component/Notepad';
-import { auth } from "./service/firebase";
-import GoogleSignIn from "./component/GoogleSignIn";
+import Notepad from './components/Notepad';
+import { auth } from "./services/firebase";
+import GoogleSignIn from "./components/GoogleSignIn";
 
 function App() {
     const [user, setUser] = useState<any>();

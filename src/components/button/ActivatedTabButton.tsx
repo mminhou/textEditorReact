@@ -1,6 +1,6 @@
 import React from "react";
 import {Button} from "@material-ui/core";
-import {Tab} from "../comm/Comm";
+import {Tab} from "../../comm/Comm";
 
 /**
  * Tab을 활성화 시키기위한 로직

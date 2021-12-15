@@ -1,5 +1,5 @@
 import React from "react";
-import {Tab} from "../comm/Comm";
+import {Tab} from "../../comm/Comm";
 import {Button} from "@material-ui/core";
 
 /**
