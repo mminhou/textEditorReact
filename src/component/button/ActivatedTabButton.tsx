@@ -5,6 +5,7 @@ import {Tab} from "../comm/Comm";
 /**
  * Tab을 활성화 시키기위한 로직
  */
+
 function ActivatedTabButton({_activatedTab, setActivatedTab, tab}) {
     const activate = (tab: Tab) => {
         setActivatedTab(tab);
