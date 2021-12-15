@@ -31,6 +31,7 @@
 - Localstorage -> Firebase storage 고도화 작업 진행중
 - initial storageState를 firebase storage에서 가져올 때 promise인 상태로 가져오기 때문에 발생할 수 있는 이슈 해결중 
 - -> useEffect() 안의 async 함수를 정의해 state를 update 할 수 있도록 설정
+- firebase storage에 data.json 생성 후 해당 데이터에 접근하여 tab contents를 변경할 수 있도록 설계
 - firebase storage GET, POST method 정의 및 로직 분리
 - 요구사항 만족하는 결과 확인
 
