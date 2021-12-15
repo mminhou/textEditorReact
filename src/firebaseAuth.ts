@@ -3,7 +3,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 
 // firebase 인증지속성 설정 -> NONE: 새로고침시 기존 인증정보 폐기, LOCAL: 활동 폐기시에도 state 유지, SESSION: 현재 탭, 세션안에서만 유지
-auth.setPersistence(firebase.auth.Auth.Persistence.NONE)
+// auth.setPersistence(firebase.auth.Auth.Persistence.NONE)
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     .then(() => {
         return auth
     })
