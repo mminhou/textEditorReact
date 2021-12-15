@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Notepad from './component/Notepad';
-import { auth } from "./firebase";
+import { auth } from "./service/firebase";
 import GoogleSignIn from "./component/GoogleSignIn";
 
 function App() {

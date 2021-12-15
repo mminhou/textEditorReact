@@ -1,6 +1,6 @@
 import React from "react";
-import {auth, fireStorage} from "../firebase";
-import {signInWithGoogle} from "../firebaseAuth";
+import {auth} from "../service/firebase";
+import {signInWithGoogle} from "../service/firebaseAuth";
 import {Grid} from "@material-ui/core";
 
 function GoogleSignIn() {
