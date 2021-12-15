@@ -2,14 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {AppBar, Grid} from "@material-ui/core";
 import '../index.scss';
 import {findTargetTab, NotepadProps, Tab} from "./comm/Comm";
-import Title from "./Title";
+import {getFirebaseStorageData, setFirebaseStorageData} from "../service/firebaseStorage";
 import Content from "./Content";
 import TabList from "./TabList";
-import SaveAsButton from "./button/SaveAsButton";
-import AddButton from "./button/AddButton";
-import SaveButton from "./button/SaveButton";
-import LoadButton from "./button/LoadButton";
-import {getFirebaseStorageData, setFirebaseStorageData} from "../firebaseStorage";
+import Toolbar from "./Toolbar";
 
 function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
     const [_tabList, setTabList] = useState<Tab[]>(tabList);
@@ -51,18 +47,8 @@ function Notepad({tabList, storageTabList, activatedTab}: NotepadProps) {
             </Grid>
             <Grid item xs={12}>
                 <AppBar position="static" style={{backgroundColor: "rgb(43, 43, 43)"}}>
-                    <div className="toolbar">
-                        <AddButton _tabList={_tabList} _activatedTab={_activatedTab} setTabList={setTabList}
-                                   setActivatedTab={setActivatedTab}/>
-                        <LoadButton _tabList={_tabList} _storageTabList={_storageTabList}
-                                    setActivatedTab={setActivatedTab} setTabList={setTabList}/>
-                        <SaveButton _tabList={_tabList} _activatedTab={_activatedTab} _editedContent={_editedContent}
-                                    saveStorage={saveStorage}/>
-                        <SaveAsButton _tabList={_tabList} _storageTabList={_storageTabList}
-                                      _activatedTab={_activatedTab} _editedTitle={_editedTitle}
-                                      _editedContent={_editedContent} saveStorage={saveStorage}/>
-                        <Title setEditedTitle={setEditedTitle}/>
-                    </div>
+                    <Toolbar _tabList={_tabList} _storageTabList={_storageTabList} _activatedTab={_activatedTab} _editedContent={_editedContent} _editedTitle={_editedTitle}
+                             setTabList={setTabList} setEditedTitle={setEditedTitle} setActivatedTab={setActivatedTab} saveStorage={saveStorage} />
                     <TabList _tabList={_tabList} _activatedTab={_activatedTab} setTabList={setTabList}
                              setActivatedTab={setActivatedTab}/>
                 </AppBar>
