@@ -20,7 +20,7 @@ function Content({_tabList, _activatedTab, setEditedContent}) {
 
     return (
         _tabList.map((tab, i: number) => (
-            _activatedTab && tab.title === _activatedTab.title ?
+            _activatedTab && _activatedTab.title === tab.title ?
                 <TextField key={i} className="tab-content"
                            multiline rows={50} variant="filled"
                            defaultValue={tab.content}
